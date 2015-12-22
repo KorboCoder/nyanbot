@@ -1,1 +1,1 @@
-web: bin/hubot -a messenger
+web: bin/hubot -a campfire

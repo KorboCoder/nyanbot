@@ -5,6 +5,10 @@ FB = require 'fb'
 
 # Custom Response class that adds a sendPrivate method (based on hubot-irc) and sendSticker method
 class FbResponse extends Response
+
+  sendURL: (urls...) ->
+    @robot.adapter.sendURL @envelope, urls...
+
   sendPrivate: (strings...) ->
     @robot.adapter.sendPrivate @envelope, strings...
 
@@ -15,6 +19,10 @@ class FbResponse extends Response
     @robot.adapter.read @envelope
 
 class Facebook extends Adapter
+
+  sendURL: (envelope, urls...) ->
+    for link in urls 
+      @bot.sendMessage {url:link}, envelope.room
 
   send: (envelope, strings...) ->
     for str in strings

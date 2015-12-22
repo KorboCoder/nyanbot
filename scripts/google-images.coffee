@@ -16,27 +16,27 @@
 
 module.exports = (robot) ->
 
-  robot.response /(nsfw)( me)? (.+)/i, (msg) ->
-    imageMe msg, msg.match[3], false,false,true (url) ->
-      msg.sendURL url
+  robot.respond /(nsfw)( me)? (.+)/i, (msg) ->
+    imageMe msg, msg.match[3], false,false,true, (url) ->
+      msg.send url
 
   robot.respond /(image|img)( me)? (.+)/i, (msg) ->
     imageMe msg, msg.match[3], (url) ->
-      msg.sendURL url
+      msg.send url
 
   robot.respond /animate( me)? (.+)/i, (msg) ->
     imageMe msg, msg.match[2], true, (url) ->
-      msg.sendURL url
+      msg.send url
 
   # pro feature, not added to docs since you can't conditionally document commands
   if process.env.HUBOT_GOOGLE_IMAGES_HEAR?
     robot.hear /^(image|img) me (.+)/i, (msg) ->
       imageMe msg, msg.match[2], (url) ->
-        msg.sendURL url
+        msg.send url
 
     robot.hear /^animate me (.+)/i, (msg) ->
       imageMe msg, msg.match[1], true, (url) ->
-        msg.sendURL url
+        msg.send url
 
   robot.respond /(?:mo?u)?sta(?:s|c)h(?:e|ify)?(?: me)? (.+)/i, (msg) ->
     if not process.env.HUBOT_MUSTACHIFY_URL?
@@ -50,11 +50,11 @@ module.exports = (robot) ->
 
     if imagery.match /^https?:\/\//i
       encodedUrl = encodeURIComponent imagery
-      msg.sendURL "#{mustachify}#{encodedUrl}"
+      msg.send "#{mustachify}#{encodedUrl}"
     else
       imageMe msg, imagery, false, true, (url) ->
         encodedUrl = encodeURIComponent url
-        msg.sendURL "#{mustachify}#{encodedUrl}"
+        msg.send "#{mustachify}#{encodedUrl}"
 
 imageMe = (msg, query, animated, faces, nsfw,cb) ->
   cb = animated if typeof animated == 'function'

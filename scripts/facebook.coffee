@@ -18,7 +18,7 @@ class Facebook extends Adapter
 
   send: (envelope, strings...) ->
     for str in strings
-      @bot.sendMessage {url:str}, envelope.room
+      @bot.sendMessage str , envelope.room
 
   sendPrivate: (envelope, strings...) ->
     @send room: envelope.user.id, strings...

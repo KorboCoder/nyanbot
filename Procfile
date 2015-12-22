@@ -1,1 +1,1 @@
-web: bin/hubot -a facebook
+web: bin/hubot -a messenger

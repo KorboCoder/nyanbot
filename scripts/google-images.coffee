@@ -18,30 +18,30 @@ module.exports = (robot) ->
 
   robot.respond /(nsfw)( me)? (.+)/i, (msg) ->
     imageMe msg, msg.match[3], false,false,true, (url) ->
-      msg.send url
+      sendURL msg, url
 
   robot.respond /(image|img)( me)? (.+)/i, (msg) ->
     imageMe msg, msg.match[3], (url) ->
-      msg.send {attachment:url, body:url}
+      sendURL msg, url
 
   robot.respond /animate( me)? (.+)/i, (msg) ->
     imageMe msg, msg.match[2], true, (url) ->
-      msg.send url
+      sendURL msg, url
 
   # pro feature, not added to docs since you can't conditionally document commands
   if process.env.HUBOT_GOOGLE_IMAGES_HEAR?
     robot.hear /^(image|img) me (.+)/i, (msg) ->
       imageMe msg, msg.match[2], (url) ->
-        msg.send url
+        sendURL msg, url
 
     robot.hear /^animate me (.+)/i, (msg) ->
       imageMe msg, msg.match[1], true, (url) ->
-        msg.send url
+        sendURL msg, url
 
   robot.respond /(?:mo?u)?sta(?:s|c)h(?:e|ify)?(?: me)? (.+)/i, (msg) ->
     if not process.env.HUBOT_MUSTACHIFY_URL?
       msg.send "Sorry, the Mustachify server is not configured."
-        , "http://i.imgur.com/BXbGJ1N.png"
+      sendURL msg, "http://i.imgur.com/BXbGJ1N.png"
       return
     mustacheBaseUrl =
       process.env.HUBOT_MUSTACHIFY_URL?.replace(/\/$/, '')
@@ -50,12 +50,13 @@ module.exports = (robot) ->
 
     if imagery.match /^https?:\/\//i
       encodedUrl = encodeURIComponent imagery
-      msg.send "#{mustachify}#{encodedUrl}"
+      sendURL "#{mustachify}#{encodedUrl}"
     else
       imageMe msg, imagery, false, true, (url) ->
         encodedUrl = encodeURIComponent url
-        msg.send "#{mustachify}#{encodedUrl}"
-
+        sendURL msg, "#{mustachify}#{encodedUrl}"
+sendURL = (msg, urlResult) ->
+  msg.send {url:urlResult, body:"Here ya go nyan~"}
 imageMe = (msg, query, animated, faces, nsfw,cb) ->
   cb = animated if typeof animated == 'function'
   cb = faces if typeof faces == 'function'

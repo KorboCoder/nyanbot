@@ -5,7 +5,7 @@
   "author": "Daniel Vallesteros <daniel.v@pocketplaylab.com>",
   "description": "Nyaaaaaaa!",
   "dependencies": {
-    "facebook-chat-api": "^1.0.3",
+    "facebook-chat-api": "git://github.com/rohitguptadev/facebook-chat-api.git#login_fix",
     "fb": "^0.7.3",
     "hubot": "^2.17.0",
     "hubot-diagnostics": "0.0.1",
@@ -15,7 +15,7 @@
     "hubot-help": "^0.1.2",
     "hubot-heroku-keepalive": "^1.0.1",
     "hubot-maps": "0.0.2",
-    "hubot-messenger": "^1.1.0",
+    "hubot-messenger": "^1.1.1",
     "hubot-pugme": "^0.1.0",
     "hubot-redis-brain": "0.0.3",
     "hubot-rules": "^0.1.1",

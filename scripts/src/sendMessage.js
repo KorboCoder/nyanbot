@@ -15,10 +15,12 @@ module.exports = function(defaultFuncs, api, ctx) {
       }
 
       var form = {
-        upload_1024: attachments[i],
+        uri: attachments[i],
+        image_width: 960,
+        image_height: 960
       };
       uploads.push(defaultFuncs
-        .postFormData("https://upload.facebook.com/ajax/mercury/upload.php", ctx.jar, form, {})
+        .post("https://www.facebook.com/message_share_attachment/fromURI/", ctx.jar, form, {})
         .then(utils.parseAndCheckLogin)
         .then(function (resData) {
           if (resData.error) {

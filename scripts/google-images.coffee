@@ -55,7 +55,7 @@ module.exports = (robot) ->
       imageMe msg, imagery, false, true, (url) ->
         encodedUrl = encodeURIComponent url
         sendURL "#{mustachify}#{encodedUrl}"
-sendURL(msg) ->
+sendURL = (msg) ->
   msg.send {url:msg}
 
 imageMe = (msg, query, animated, faces, nsfw,cb) ->

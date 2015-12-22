@@ -16,6 +16,10 @@
 
 module.exports = (robot) ->
 
+  robot.response /(nsfw)( me)? (.+)/i, (msg) ->
+    imageMe msg, msg.match[3], false,false,true (url) ->
+      msg.sendURL url
+
   robot.respond /(image|img)( me)? (.+)/i, (msg) ->
     imageMe msg, msg.match[3], (url) ->
       msg.sendURL url
@@ -52,7 +56,7 @@ module.exports = (robot) ->
         encodedUrl = encodeURIComponent url
         msg.sendURL "#{mustachify}#{encodedUrl}"
 
-imageMe = (msg, query, animated, faces, cb) ->
+imageMe = (msg, query, animated, faces, nsfw,cb) ->
   cb = animated if typeof animated == 'function'
   cb = faces if typeof faces == 'function'
   googleCseId = process.env.HUBOT_GOOGLE_CSE_ID
@@ -66,10 +70,15 @@ imageMe = (msg, query, animated, faces, cb) ->
     q =
       q: query,
       searchType:'image',
-      safe: process.env.HUBOT_GOOGLE_SAFE_SEARCH || 'high',
       fields:'items(link)',
       cx: googleCseId,
       key: googleApiKey
+
+    if nsfw is true
+       q.safe = 'off'
+    else
+       q.safe = process.env.HUBOT_GOOGLE_SAFE_SEARCH || 'high'
+
     if animated is true
       q.fileType = 'gif'
       q.hq = 'animated'

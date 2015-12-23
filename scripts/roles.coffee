@@ -23,7 +23,8 @@ module.exports = (robot) ->
     matchedUsers = robot.brain.usersForFuzzyName(rawName)
     userList = robot.brain.users()
     for key, user of userList
-      matchedUsers.push(user) if user.nickname && (user.nickname.toLowerCase() is lowerRawName)
+      if user not in matchedUsers
+        matchedUsers.push(user) if user.nickname && (user.nickname.toLowerCase() is lowerRawName)
 
     return matchedUsers
 

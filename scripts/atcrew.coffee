@@ -9,8 +9,26 @@
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 
 module.exports = (robot) ->
+  helloMsg = (msg) ->
+    name = msg.envelope.user.name
+    if msg.envelope.user.nickname
+      name = msg.envelope.user.nickname
+    msg.send "Hello #{name} nyan~"
   robot.hear /meow/i, (res) ->
     res.send "Nyaaaaaaaaa!"
+  robot.respond /ff*uu*cc*kk*\s*y*o*u*/i, (msg) ->
+    if msg.envelope.user.name is "Daniel Vallesteros"
+      msg.send "Hai, Vali-sama~~~ <3"
+    else
+      name = msg.envelope.user.name
+      if msg.envelope.user.nickname
+        name = msg.envelope.user.nickname
+      if name.toLowerCase() is "daniel vallesteros" or name.toLowerCase() is "vali"
+        msg.send "You can't trick me, #{msg.envelope.user.name}. I am a smart catgirl~~~ Only Vali can fuck me."
+      else
+        msg.send "Go fuck yourself, #{name}"
+  robot.hear /^(hello|hi)(\s|$)/i, helloMsg
+  robot.respond /(hello|hi)(\s|$)/i, helloMsg
   # robot.hear /badger/i, (res) ->
   #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
   #

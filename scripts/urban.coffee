@@ -9,9 +9,8 @@
 #
 # Commands:
 #   hubot what is <term>?         - Searches Urban Dictionary and returns definition
-#   hubot urban me <term>         - Searches Urban Dictionary and returns definition
-#   hubot urban define me <term>  - Searches Urban Dictionary and returns definition
-#   hubot urban example me <term> - Searches Urban Dictionary and returns example 
+#   hubot define <key> as <definition> - set that as the definition from now on
+#   hubot forget <key> - forgets that definition   
 #
 # Author:
 #   Travis Jeffery (@travisjeffery)
@@ -21,24 +20,31 @@
 #   Benjamin Eidelman (@beneidel)
 
 module.exports = (robot) ->
+  if not robot.brain.definitions
+    robot.brain.definitions = {}
+
+  robot.respond /define ([^\?]*)[\?]* as ([^\?]*)[\?]*/i, (msg) ->
+    key = msg.match[1]
+    value = msg.match[2]
+    robot.brain.definitions[key] = value
+    msg.send "Hai! Defining #{key} as #{value}"
+
+  robot.respond /forget ([^\?]*)[\?]*/i, (msg) ->
+    key = msg.match[1]
+    robot.brain.definitions[key] = undefined
+    msg.send "I forgot what #{key} is. Nyoron~"
 
   robot.respond /what ?is ([^\?]*)[\?]*/i, (msg) ->
-    urbanDict msg, msg.match[1], (found, entry, sounds) ->
-      if !found
-        msg.send "I don't know what \"#{msg.match[1]}\" is nyaaaaa~"
-        return
-      msg.send "#{entry.definition}"
-
-
-  robot.respond /(urban)( define)?( example)?( me)? (.*)/i, (msg) ->
-    urbanDict msg, msg.match[5], (found, entry, sounds) ->
-      if !found
-        msg.send "\"#{msg.match[5]}\" not found"
-        return
-      if msg.match[3]
-        msg.send "#{entry.example}"
-      else
+    if robot.brain.definitions[msg.match[1]]
+      msg.send robot.brain.definitions[msg.match[1]]
+    else
+      urbanDict msg, msg.match[1], (found, entry, sounds) ->
+        if !found
+          msg.send "I don't know what \"#{msg.match[1]}\" is nyaaaaa~"
+          return
         msg.send "#{entry.definition}"
+
+
 
 urbanDict = (msg, query, callback) ->
   msg.http("http://api.urbandictionary.com/v0/define?term=#{escape(query)}")

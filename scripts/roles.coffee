@@ -18,6 +18,14 @@ module.exports = (robot) ->
 
   getAmbiguousUserText = (users) ->
     "Be more specific, I know #{users.length} people named like that: #{(user.name for user in users).join(", ")}"
+  getUsersFromRawName = (rawName, msg) ->
+    lowerRawName = rawName.toLowerCase()
+    matchedUsers = robot.brain.usersForFuzzyName(rawName)
+    userList = robot.brain.users()
+    for key, user of userList
+      matchedUsers.push(user) if user.nickname && (user.nickname.toLowerCase() is lowerRawName)
+
+    return matchedUsers
 
   robot.respond /who is @?([\w .\-]+)\?*$/i, (msg) ->
     joiner = ', '
@@ -28,7 +36,7 @@ module.exports = (robot) ->
     else if name is robot.name
       msg.send "The best."
     else
-      users = robot.brain.usersForFuzzyName(name)
+      users = getUsersFromRawName(name,msg)
       if users.length is 1
         user = users[0]
         user.roles = user.roles or [ ]
@@ -49,7 +57,7 @@ module.exports = (robot) ->
 
     unless name in ['', 'who', 'what', 'where', 'when', 'why']
       unless newRole.match(/^not\s+/i)
-        users = robot.brain.usersForFuzzyName(name)
+        users = getUsersFromRawName(name,msg)
         if users.length is 1
           user = users[0]
           user.roles = user.roles or [ ]
@@ -72,7 +80,7 @@ module.exports = (robot) ->
     newRole = msg.match[2].trim()
 
     unless name in ['', 'who', 'what', 'where', 'when', 'why']
-      users = robot.brain.usersForFuzzyName(name)
+      users = getUsersFromRawName(name,msg)
       if users.length is 1
         user = users[0]
         user.roles = user.roles or [ ]

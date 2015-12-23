@@ -25,7 +25,7 @@ module.exports = (robot) ->
   robot.respond /what ?is ([^\?]*)[\?]*/i, (msg) ->
     urbanDict msg, msg.match[1], (found, entry, sounds) ->
       if !found
-        msg.send "I don't know what \"#{msg.match[1]}\" is"
+        msg.send "I don't know what \"#{msg.match[1]}\" is nyaaaaa~"
         return
       msg.send "#{entry.definition}"
 

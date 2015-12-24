@@ -44,6 +44,14 @@ module.exports = (robot) ->
           return
         msg.send "#{entry.definition}"
 
+  robot.respond /what do you know/i, (msg) ->
+    if not robot.brain.data.definitions? || Object.keys(robot.brain.data.definitions).length == 0
+      msg.send "I don't know anything yet. Teach me please <3"
+    else
+      joiner = ';'
+      keyList =Object.keys(robot.brain.data.definitions)
+
+      msg.send "I know #{keyList.join(joiner)}"
 
 
 urbanDict = (msg, query, callback) ->

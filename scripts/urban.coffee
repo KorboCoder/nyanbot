@@ -36,7 +36,7 @@ module.exports = (robot) ->
 
   robot.respond /what ?is ([^\?]*)[\?]*/i, (msg) ->
     if robot.brain.data.definitions[msg.match[1].toLowerCase()]
-      msg.send robot.data.brain.definitions[msg.match[1].toLowerCase()]
+      msg.send robot.brain.data.definitions[msg.match[1].toLowerCase()]
     else
       urbanDict msg, msg.match[1], (found, entry, sounds) ->
         if !found

@@ -31,7 +31,7 @@ module.exports = (robot) ->
 
   robot.respond /forget ([^\?]*)[\?]*/i, (msg) ->
     key = msg.match[1]
-    robot.brain.data.definitions[key] = undefined
+    delete robot.brain.data.definitions[key]
     msg.send "I forgot what #{key} is. Nyoron~"
 
   robot.respond /what ?is ([^\?]*)[\?]*/i, (msg) ->

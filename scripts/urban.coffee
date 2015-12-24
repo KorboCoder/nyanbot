@@ -28,12 +28,14 @@ module.exports = (robot) ->
     value = msg.match[2]
     robot.brain.data.definitions[key.toLowerCase()] = value
     msg.send "Hai! Defining #{key} as #{value}"
+    robot.brain.save()
 
   robot.respond /forget ([^\?]*)[\?]*/i, (msg) ->
     key = msg.match[1]
     delete robot.brain.data.definitions[key]
     msg.send "I forgot what #{key} is. Nyoron~"
-
+    robot.brain.save()
+    
   robot.respond /what ?is ([^\?]*)[\?]*/i, (msg) ->
     if robot.brain.data.definitions[msg.match[1].toLowerCase()]
       msg.send robot.brain.data.definitions[msg.match[1].toLowerCase()]
@@ -48,7 +50,7 @@ module.exports = (robot) ->
     if not robot.brain.data.definitions? || Object.keys(robot.brain.data.definitions).length == 0
       msg.send "I don't know anything yet. Teach me please <3"
     else
-      joiner = ';'
+      joiner = ', '
       keyList =Object.keys(robot.brain.data.definitions)
 
       msg.send "I know #{keyList.join(joiner)}"

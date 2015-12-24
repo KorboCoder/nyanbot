@@ -20,23 +20,23 @@
 #   Benjamin Eidelman (@beneidel)
 
 module.exports = (robot) ->
-  if not robot.brain.definitions
-    robot.brain.definitions = {}
+  if not robot.brain.data.definitions
+    robot.brain.data.definitions = {}
 
   robot.respond /define ([^\?]*)[\?]* as ([^\?]*)[\?]*/i, (msg) ->
     key = msg.match[1]
     value = msg.match[2]
-    robot.brain.definitions[key.toLowerCase()] = value
+    robot.brain.data.definitions[key.toLowerCase()] = value
     msg.send "Hai! Defining #{key} as #{value}"
 
   robot.respond /forget ([^\?]*)[\?]*/i, (msg) ->
     key = msg.match[1]
-    robot.brain.definitions[key] = undefined
+    robot.brain.data.definitions[key] = undefined
     msg.send "I forgot what #{key} is. Nyoron~"
 
   robot.respond /what ?is ([^\?]*)[\?]*/i, (msg) ->
-    if robot.brain.definitions[msg.match[1].toLowerCase()]
-      msg.send robot.brain.definitions[msg.match[1].toLowerCase()]
+    if robot.brain.data.definitions[msg.match[1].toLowerCase()]
+      msg.send robot.data.brain.definitions[msg.match[1].toLowerCase()]
     else
       urbanDict msg, msg.match[1], (found, entry, sounds) ->
         if !found

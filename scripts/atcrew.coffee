@@ -8,7 +8,6 @@
 #
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 
-api.setOptions forceLogin:true
 module.exports = (robot) ->
   helloMsg = (msg) ->
     name = msg.envelope.user.name
